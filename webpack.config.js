@@ -1,6 +1,9 @@
 const { resolve } = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+
+process.env.NODE_ENV = 'development'
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -12,7 +15,12 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          'style-loader',
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../'
+            }
+          },
           'css-loader',
           'less-loader'
         ]
@@ -23,11 +31,20 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              publicPath: ''
+              publicPath: '../'
             }
-
           },
           'css-loader',
+          {
+            loader: 'postcss-loader',
+            options:{
+              postcssOptions:{
+                plugins: () => {
+                  'postcss-preset-env'
+                }
+              }
+            }
+          }
         ],
       },
       {
@@ -60,7 +77,8 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: 'css/index.css',
-    })
+    }),
+    new OptimizeCssAssetsWebpackPlugin()
   ],
   mode: 'development',
   devServer: {
