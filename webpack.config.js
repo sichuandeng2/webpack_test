@@ -3,7 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 
-process.env.NODE_ENV = 'development'
+// process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'production'
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -22,7 +23,17 @@ module.exports = {
             }
           },
           'css-loader',
-          'less-loader'
+          'less-loader',
+          {
+            loader: 'postcss-loader',
+            options:{
+              postcssOptions:{
+                plugins: () => {
+                  'postcss-preset-env'
+                }
+              }
+            }
+          }
         ]
       },
       {
@@ -50,7 +61,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-        loader: 'html-loader'
+        loader: 'html-loader',
       },
       {
         test: /\.(jpg|png|gif)$/,
@@ -69,24 +80,36 @@ module.exports = {
           limit: 12*1024,
           name: '[hash:10].[ext]'
         }
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          fix: true
+        }
       }
     ]
   },
   plugins: [
+    // html模板
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
+    // css样式提取
     new MiniCssExtractPlugin({
       filename: 'css/index.css',
     }),
-    new OptimizeCssAssetsWebpackPlugin()
+    // 压缩css文件
+    // new OptimizeCssAssetsWebpackPlugin()
   ],
   mode: 'development',
   devServer: {
     contentBase: resolve(__dirname, 'dist'),
     compress: true,
     open: true,
-    port: 3000
+    port: 80,
+    host: '192.168.10.32'
   }
 
 }
