@@ -101,7 +101,7 @@ module.exports = {
       filename: 'css/index.css',
     }),
     // 压缩css文件
-    // new OptimizeCssAssetsWebpackPlugin()
+    new OptimizeCssAssetsWebpackPlugin()
   ],
   mode: 'development',
   devServer: {
