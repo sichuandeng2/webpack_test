@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
 
 // 声明运行模式：development | production
-const runMode = 'development'
+const runMode = 'production'
 
 // 定Css样式loader
 const commentCssLoader = [
@@ -130,8 +130,9 @@ module.exports = {
     contentBase: resolve(__dirname, 'dist'),
     compress: true,
     open: true,
-    port: 80,
-    host: '192.168.10.32'
+    port: 8080,
+    host: '192.168.10.32',
+    disableHostCheck: true
   }
 
 }
